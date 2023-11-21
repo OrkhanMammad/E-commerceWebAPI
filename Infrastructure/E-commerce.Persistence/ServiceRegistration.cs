@@ -34,8 +34,8 @@ namespace E_commerce.Persistence
                 //options.Password.RequiredLength = 8;
                 //options.User.RequireUniqueEmail = true;
                 //options.Lockout.AllowedForNewUsers = true;
-                //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
-                //options.Lockout.MaxFailedAccessAttempts = 3;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                options.Lockout.MaxFailedAccessAttempts = 3;
                 options.User.RequireUniqueEmail = true;
 
             }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();

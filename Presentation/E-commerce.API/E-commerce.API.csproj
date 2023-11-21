@@ -14,6 +14,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Serilog.AspNetCore" Version="6.0.0" />
+    <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="6.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
@@ -21,6 +23,7 @@
     <ProjectReference Include="..\..\Core\E-commerce.Application\E-commerce.Application.csproj" />
     <ProjectReference Include="..\..\Infrastructure\E-commerce.Infrastructure\E-commerce.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\E-commerce.Persistence\E-commerce.Persistence.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\E-commerce.SignalR\E-commerce.SignalR.csproj" />
   </ItemGroup>
 
 </Project>

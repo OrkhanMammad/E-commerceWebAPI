@@ -40,12 +40,16 @@ namespace E_commerce.Persistence.Repositories.AccountRepos
                 {
                     return new AppUserLoginResponse { ResponseCode = 2, Message = "Username or Password is not correct" };
                 }
-                SignInResult signInResult = await _signInManager.CheckPasswordSignInAsync(appUser, appUserLoginVM.Password, false);
+                if (appUser.LockoutEnd != null)
+                {
+                    return new AppUserLoginResponse { ResponseCode = 2, Message = "This Account Has Been Locked" };
+                }
+                SignInResult signInResult = await _signInManager.CheckPasswordSignInAsync(appUser, appUserLoginVM.Password, true);
                 if (!signInResult.Succeeded)
                 {
                     return new AppUserLoginResponse { ResponseCode = 2, Message = "Username or Password is not correct" };
                 }
-                TokenDTO token = _tokenHandler.CreateAccessToken();
+                TokenDTO token = _tokenHandler.CreateAccessToken(appUser);
 
                 return new AppUserLoginResponse { ResponseCode = 1, Message = "Logged In Successfully", Token = token };
             }

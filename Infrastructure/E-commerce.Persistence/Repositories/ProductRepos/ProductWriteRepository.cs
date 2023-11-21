@@ -1,4 +1,5 @@
-﻿using E_commerce.Application.Repositories.ProductRepos;
+﻿using E_commerce.Application.Abstractions.Hubs;
+using E_commerce.Application.Repositories.ProductRepos;
 using E_commerce.Application.Responses.ProductCRUD;
 using E_commerce.Application.ViewModels.ProductVMs;
 using E_commerce.Domain.Entities;
@@ -15,9 +16,11 @@ namespace E_commerce.Persistence.Repositories.ProductRepos
     public class ProductWriteRepository : IProductWriteRepository
     {
         readonly AppDbContext _context;
-        public ProductWriteRepository(AppDbContext context)
+        readonly IProductHubService _productHubService;
+        public ProductWriteRepository(AppDbContext context, IProductHubService productHubService)
         {
             _context = context;
+            _productHubService = productHubService;
         }
         public async Task<ProductAddResponse> AddNewProduct(ProductAddVM productAddVM)
         {
@@ -46,6 +49,7 @@ namespace E_commerce.Persistence.Repositories.ProductRepos
 
                 await _context.Products.AddAsync(newProduct);
                 await _context.SaveChangesAsync();
+                await _productHubService.ProductAddedMessageAsync($"{productAddVM.Name} Has Been Added");
 
                 return new ProductAddResponse { ResponseCode = 1, Message = productAddVM.Name + " " + "Added Successfully" };
             }
