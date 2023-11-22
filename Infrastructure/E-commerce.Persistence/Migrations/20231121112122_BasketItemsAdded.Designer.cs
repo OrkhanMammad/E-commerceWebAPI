@@ -4,6 +4,7 @@ using E_commerce.Persistence.DataAccessLayers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_commerce.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231121112122_BasketItemsAdded")]
+    partial class BasketItemsAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,10 +31,6 @@ namespace E_commerce.Persistence.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("AppUserID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -62,9 +60,6 @@ namespace E_commerce.Persistence.Migrations
                     b.Property<double>("TotalPrice")
                         .HasColumnType("float");
 
-                    b.Property<double>("UnitPrice")
-                        .HasColumnType("float");
-
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -72,8 +67,6 @@ namespace E_commerce.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppUserID");
 
                     b.HasIndex("ProductID");
 
@@ -127,6 +120,7 @@ namespace E_commerce.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("RefreshToken")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("RefreshTokenEndDate")
@@ -385,17 +379,13 @@ namespace E_commerce.Persistence.Migrations
 
             modelBuilder.Entity("E_commerce.Domain.Entities.BasketItem", b =>
                 {
-                    b.HasOne("E_commerce.Domain.Entities.Identity.AppUser", null)
-                        .WithMany("BasketItems")
-                        .HasForeignKey("AppUserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("E_commerce.Domain.Entities.Product", null)
+                    b.HasOne("E_commerce.Domain.Entities.Product", "Product")
                         .WithMany("BasketItems")
                         .HasForeignKey("ProductID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("E_commerce.Domain.Entities.ProductImage", b =>
@@ -456,11 +446,6 @@ namespace E_commerce.Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("E_commerce.Domain.Entities.Identity.AppUser", b =>
-                {
-                    b.Navigation("BasketItems");
                 });
 
             modelBuilder.Entity("E_commerce.Domain.Entities.Product", b =>

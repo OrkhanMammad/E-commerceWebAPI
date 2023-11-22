@@ -31,11 +31,6 @@ namespace E_commerce.Application.AutoMappers
                     ProductID = pi.ProductID
                 }).ToList()
             };
-
-
-
-
-
         }
 
 

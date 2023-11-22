@@ -17,7 +17,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddHttpContextAccessor();//clientdan gelen request neticesinde yaradilan httpcontext obyektine layerlardaki classlar vasitesile cata bilmek ucun, jwt-den username claimini elde etmek
 builder.Services.AddControllers()
     .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<AddProductValidator>()); ;
 builder.Services.AddPersistenceServices();

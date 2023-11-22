@@ -18,6 +18,7 @@ namespace E_commerce.Domain.Entities
         public double Price { get; set; }
 
         public List<ProductImage> ProductImages { get; set; }
+        public List<BasketItem> BasketItems { get; set; }
 
 
     }
