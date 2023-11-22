@@ -1,10 +1,12 @@
 ﻿using E_commerce.Application.Repositories.AccountRepos;
 using E_commerce.Application.Repositories.BasketRepos;
+using E_commerce.Application.Repositories.OrderRepos;
 using E_commerce.Application.Repositories.ProductRepos;
 using E_commerce.Domain.Entities.Identity;
 using E_commerce.Persistence.DataAccessLayers;
 using E_commerce.Persistence.Repositories.AccountRepos;
 using E_commerce.Persistence.Repositories.BasketRepos;
+using E_commerce.Persistence.Repositories.OrderRepos;
 using E_commerce.Persistence.Repositories.ProductRepos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +30,8 @@ namespace E_commerce.Persistence
             services.AddScoped<IAccountWriteRepository, AccountWriteRepository>();
             services.AddScoped<IBasketWriteRepository, BasketWriteRepository>();
             services.AddScoped<IBasketReadRepository, BasketReadRepository>();
+            services.AddScoped<IOrderWriteRepository, OrderWriteRepository>();
+            services.AddScoped<IOrderReadRepository, OrderReadRepository>();
             services.AddIdentity<AppUser, IdentityRole>(options =>
             {
                 //options.Password.RequiredUniqueChars = 0;

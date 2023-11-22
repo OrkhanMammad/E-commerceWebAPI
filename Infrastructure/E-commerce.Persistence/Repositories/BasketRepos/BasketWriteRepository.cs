@@ -42,6 +42,7 @@ namespace E_commerce.Persistence.Repositories.BasketRepos
                     return new AddToBasketResponse { ResponseCode = 404, Message = "User Not Found" };
                 }
                 Product? product = await _context.Products.Include(p => p.ProductImages).FirstOrDefaultAsync(p => p.Id == productId);
+               
                 if (product == null || product.Stock < 1 || product.IsDeleted)
                 {
                     return new AddToBasketResponse { ResponseCode = 2, Message = "Product No More Exists" };
@@ -73,8 +74,7 @@ namespace E_commerce.Persistence.Repositories.BasketRepos
             {
                 return new AddToBasketResponse { ResponseCode = 404, Message = ex.Message };
             }
-        }
-
+        }       
        
         public async Task<RemoveSingleBasketItemResponse> RemoveSingleBasketAsync(int basketItemId)
         {
@@ -111,6 +111,7 @@ namespace E_commerce.Persistence.Repositories.BasketRepos
             }
             
         }
+        
         public async Task<RemoveAllBasketitemsResponse> RemoveAllBasketItemsAsync()
         {
             try
@@ -137,7 +138,7 @@ namespace E_commerce.Persistence.Repositories.BasketRepos
             
 
         }
-
+       
         public async Task<ChangeBasketItemQuantityResponse> IncreaseBasketItemQuantityAsync(int basketItemId)
         {
             try
@@ -202,8 +203,7 @@ namespace E_commerce.Persistence.Repositories.BasketRepos
             }
             
         }
-
-
+       
         public async Task<ChangeBasketItemQuantityResponse> DecreaseBasketItemQuantityAsync(int basketItemId)
         {
             try

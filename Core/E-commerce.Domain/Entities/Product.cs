@@ -20,6 +20,8 @@ namespace E_commerce.Domain.Entities
         public List<ProductImage> ProductImages { get; set; }
         public List<BasketItem> BasketItems { get; set; }
 
+        public List<OrderItem> OrderItems { get; set; }
+
 
     }
 }

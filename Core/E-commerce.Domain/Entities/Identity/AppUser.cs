@@ -14,5 +14,6 @@ namespace E_commerce.Domain.Entities.Identity
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenEndDate { get; set; }
         public List<BasketItem> BasketItems { get; set; }
+        public List<Order> Orders { get; set; }
     }
 }

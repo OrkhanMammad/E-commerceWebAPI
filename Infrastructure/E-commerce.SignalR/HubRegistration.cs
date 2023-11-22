@@ -13,6 +13,7 @@ namespace E_commerce.SignalR
         public static void MapHubs(this WebApplication application)
         {
             application.MapHub<ProductHub>("/product/hub");
+            application.MapHub<OrderHub>("/order/hub");
 
             //butun hublari program.cs-de app.maphub yazmamaq ucun istifade olunan extensiondur.
         }
