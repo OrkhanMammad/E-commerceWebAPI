@@ -16,6 +16,7 @@ namespace E_commerce.Domain.Entities
         public string AppUserID { get; set; }
         [NotMapped]
         public Product? Product { get; set; }
+        public string ProductName { get; set; }
         public int ProductID { get; set; }
         public short Quantity { get; set; }
         public double UnitPrice { get; set; }

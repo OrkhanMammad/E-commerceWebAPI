@@ -11,7 +11,8 @@ namespace E_commerce.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Admin")]
+    [Authorize(AuthenticationSchemes = "Admin",Roles = "USER")]
+    
     public class ProductsController : ControllerBase
     {
         readonly IProductReadRepository _productReadRepository;

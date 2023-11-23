@@ -81,7 +81,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
             LifetimeValidator = (notBefore, expires,securityToken, validationParameters) => expires != null ? expires>DateTime.UtcNow : false,
             NameClaimType=ClaimTypes.Name, //JWT UZERINDE NAME CLAIMINE QARSILIQ GELEN DEYERI USER.IDENTITY.NAME ILE ELDE EDE BILERIK
-
+            RoleClaimType=ClaimTypes.Role,
 
         };
     });

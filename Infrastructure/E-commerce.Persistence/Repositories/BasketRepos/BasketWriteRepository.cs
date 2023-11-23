@@ -53,6 +53,7 @@ namespace E_commerce.Persistence.Repositories.BasketRepos
                     BasketItem basketItem = new BasketItem
                     {
                         ProductID = productId,
+                        ProductName=product.Name,
                         Image = product.ProductImages.FirstOrDefault()?.Image,
                         UnitPrice = product.Price,
                         TotalPrice = product.Price,

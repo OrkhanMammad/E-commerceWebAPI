@@ -21,6 +21,7 @@ namespace E_commerce.Application.AutoMappers
             {
                 Id = basketItem.Id,
                 UnitPrice = basketItem.UnitPrice,
+                ProductName= basketItem.ProductName,
                 Quantity = basketItem.Quantity,
                 ProductID= basketItem.ProductID,
                 TotalPrice=basketItem.TotalPrice,

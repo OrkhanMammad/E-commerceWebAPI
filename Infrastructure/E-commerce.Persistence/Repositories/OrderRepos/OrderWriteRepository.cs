@@ -2,6 +2,7 @@
 using E_commerce.Application.AutoMappers;
 using E_commerce.Application.Repositories.OrderRepos;
 using E_commerce.Application.Responses.OrderCRUD;
+using E_commerce.Application.Services;
 using E_commerce.Domain.Entities;
 using E_commerce.Domain.Entities.Identity;
 using E_commerce.Persistence.DataAccessLayers;
@@ -21,11 +22,12 @@ namespace E_commerce.Persistence.Repositories.OrderRepos
         readonly IHttpContextAccessor _contextAccessor;
         readonly AppDbContext _context;
         readonly IOrderHubService _orderHubService;
+        
         public OrderWriteRepository(IHttpContextAccessor contextAccessor, AppDbContext context, IOrderHubService orderHubService)
         {
             _contextAccessor = contextAccessor;
             _context = context;
-            _orderHubService = orderHubService;
+            _orderHubService = orderHubService;          
         }
 
 
@@ -41,7 +43,11 @@ namespace E_commerce.Persistence.Repositories.OrderRepos
 
                 }
                 var userName = _contextAccessor?.HttpContext?.User?.Identity?.Name;
-                AppUser? appUser = await _context.Users.Include(u => u.BasketItems).Include(u => u.Orders).FirstOrDefaultAsync(u => u.UserName == userName);
+
+                AppUser? appUser = await _context.Users
+                                                 .Include(u => u.BasketItems)
+                                                 .Include(u => u.Orders)
+                                                 .FirstOrDefaultAsync(u => u.UserName == userName);
                 
                 if (appUser == null)
                 {
@@ -62,10 +68,10 @@ namespace E_commerce.Persistence.Repositories.OrderRepos
                     products.FirstOrDefault(p => p.Id == basketItem.ProductID).Stock -= basketItem.Quantity;
                     newOrder.OrderItems.Add(new OrderItem
                     {
-                        Price = basketItem.UnitPrice,
+                        Price = basketItem.UnitPrice,                 
                         Quantity = basketItem.Quantity,
                         TotalAmount = basketItem.TotalPrice,
-                        ProductName = "Default",
+                        ProductName = basketItem.ProductName,
                         ProductId = basketItem.ProductID
 
                     });

@@ -1,6 +1,7 @@
 ﻿using E_commerce.Application.Repositories.AccountRepos;
 using E_commerce.Application.RequestParameters;
 using E_commerce.Application.Responses.AppUserCRUD;
+using E_commerce.Application.Services;
 using E_commerce.Application.ViewModels.AppUserVMs;
 using E_commerce.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Http;
@@ -16,11 +17,15 @@ namespace E_commerce.API.Controllers
         readonly RoleManager<IdentityRole> _roleManager;
         readonly IAccountReadRepository _accountReadRepository;
         readonly IAccountWriteRepository _accountWriteRepository;
-        public AccountsController(IAccountReadRepository accountReadRepository, IAccountWriteRepository accountWriteRepository, RoleManager<IdentityRole> roleManager)
+        public AccountsController(IAccountReadRepository accountReadRepository,
+                                  IAccountWriteRepository accountWriteRepository,   
+                                  RoleManager<IdentityRole> roleManager
+                                 )
         {
             _accountReadRepository = accountReadRepository;
             _accountWriteRepository = accountWriteRepository;
             _roleManager = roleManager;
+            
 
         }
 
@@ -53,9 +58,7 @@ namespace E_commerce.API.Controllers
             return await _accountWriteRepository.Login(appUserLoginVM);
         }
 
-
-
-
+        
 
         //[HttpGet]
         //[Route("addroles")]
