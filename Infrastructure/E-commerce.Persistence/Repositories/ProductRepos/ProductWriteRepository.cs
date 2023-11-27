@@ -22,6 +22,22 @@ namespace E_commerce.Persistence.Repositories.ProductRepos
             _context = context;
             _productHubService = productHubService;
         }
+
+        void MakeChangesOnProduct(Product updateProduct, ProductUpdateVM productUpdateVM)
+        {
+            DateTime dateTime = DateTime.Now;
+
+            updateProduct.Price = productUpdateVM.Price;
+            updateProduct.Stock = productUpdateVM.Stock;
+            updateProduct.Description = productUpdateVM.Description;
+            updateProduct.Name = productUpdateVM.Name;
+            updateProduct.ProductImages = new List<ProductImage>();
+            updateProduct.UpdatedDate = dateTime;
+            foreach (byte[] image in productUpdateVM.Images)
+            {
+                updateProduct.ProductImages.Add(new ProductImage { Image = image, CreatedDate = dateTime });
+            }
+        }
         public async Task<ProductAddResponse> AddNewProduct(ProductAddVM productAddVM)
         {
             try
@@ -69,7 +85,7 @@ namespace E_commerce.Persistence.Repositories.ProductRepos
                 {
                     return new ProductUpdateResponse { ResponseCode = 3, Message = productUpdateVM.Name + " Is Already Used For Another Product" };
                 }
-                DateTime dateTime = DateTime.Now;
+
                 Product updateProduct = DBproducts.FirstOrDefault(p => p.Id == productUpdateVM.ProductID);
                 if (updateProduct == null)
                 {
@@ -77,24 +93,14 @@ namespace E_commerce.Persistence.Repositories.ProductRepos
                 }
                 string productPreviousName = updateProduct.Name;
 
-                updateProduct.Price = productUpdateVM.Price;
-                updateProduct.Stock = productUpdateVM.Stock;
-                updateProduct.Description = productUpdateVM.Description;
-                updateProduct.Name = productUpdateVM.Name;
-                updateProduct.ProductImages = new List<ProductImage>();
-                updateProduct.UpdatedDate = dateTime;
-                foreach (byte[] image in productUpdateVM.Images)
-                {
-                    updateProduct.ProductImages.Add(new ProductImage { Image = image, CreatedDate = dateTime });
-                }
+                MakeChangesOnProduct(updateProduct,productUpdateVM);
                 await _context.SaveChangesAsync();
                 return new ProductUpdateResponse { ResponseCode = 1, Message = productPreviousName + " " + "Updated Successfully" };
             }
             catch (Exception ex)
             {
                 return new ProductUpdateResponse { ResponseCode = 404, Message = ex.Message };
-            }
-            
+            }            
         }
 
 

@@ -52,14 +52,13 @@ namespace E_commerce.Persistence.Repositories.ProductRepos
 
                     };
                 }
-                else
-                {
+                else              
                     return new ProductGetAllResponse
                     {
                         ResponseCode = 2,
                         Message = "Products Could Not Found",
                     };
-                }
+                
             }
             catch(Exception ex)
             {
@@ -75,11 +74,11 @@ namespace E_commerce.Persistence.Repositories.ProductRepos
         {
             try
             {
-                IQueryable<Product> Products = _context.Products
-                .Where(p => p.IsDeleted == false)
-                .Include(p => p.ProductImages)
-                .AsNoTracking();
-                Product dbProduct = Products.FirstOrDefault(p => p.Id == id);
+                Product? dbProduct = _context.Products
+                                            .AsNoTracking()
+                                            .Include(p => p.ProductImages)
+                                            .FirstOrDefault(p => p.Id == id && p.IsDeleted == false);
+
                 if (dbProduct != null)
                 {
                     ProductMapper mapper = new ProductMapper();
@@ -89,10 +88,49 @@ namespace E_commerce.Persistence.Repositories.ProductRepos
                 return new ProductGetByIdResponse { product = null, Message = "Product Could Not Found", ResponseCode = 2 };
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return new ProductGetByIdResponse { product = new ProductDTO(), Message = ex.Message, ResponseCode = 404};
-            }                
+                return new ProductGetByIdResponse { product = new ProductDTO(), Message = ex.Message, ResponseCode = 404 };
+            }
         }
+
+        //public ProductGetByIdResponse GetProductById(int id)
+        //{
+        //    try
+        //    {
+        //        ProductDTO? productDTO = _context.Products
+        //                                    .Where(p => p.Id == id && p.IsDeleted == false)
+        //                                    .AsNoTracking()
+        //                                    .Include(p => p.ProductImages)
+        //                                    .Select(p=>new ProductDTO 
+        //                                                            { Id=p.Id,
+        //                                                              Name=p.Name,
+        //                                                              Price=p.Price,
+        //                                                              ProductImages = p.ProductImages.Select(pi => new ProductImageDTO
+        //                                                              {
+        //                                                                  Id = pi.Id,
+        //                                                                  Image = pi.Image,
+        //                                                                  ProductID = pi.ProductID
+        //                                                              }).ToList(),
+        //                                                              Description=p.Description,
+        //                                                              Stock=p.Stock,
+        //                                                              }).FirstOrDefault();
+
+
+
+
+
+        //        if (productDTO != null)
+        //        {
+        //            return new ProductGetByIdResponse { product = productDTO, Message = "Product Obtained", ResponseCode = 1 };
+        //        }
+        //        return new ProductGetByIdResponse { product = null, Message = "Product Could Not Found", ResponseCode = 2 };
+        //    }
+
+        //    catch (Exception ex)
+        //    {
+        //        return new ProductGetByIdResponse { product = new ProductDTO(), Message = ex.Message, ResponseCode = 404 };
+        //    }
+        //}
     }
 }

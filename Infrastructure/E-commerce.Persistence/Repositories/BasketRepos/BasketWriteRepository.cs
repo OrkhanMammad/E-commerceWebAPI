@@ -44,15 +44,12 @@ namespace E_commerce.Persistence.Repositories.BasketRepos
                 AppUser? appUser = await GetUser();
                 
                 if (appUser == null)
-                {
                     return new AddToBasketResponse { ResponseCode = 404, Message = "User Not Found" };
-                }
+                
                 Product? product = await _context.Products.Include(p => p.ProductImages).FirstOrDefaultAsync(p => p.Id == productId);
                
                 if (product == null || product.Stock < 1 || product.IsDeleted)
-                {
-                    return new AddToBasketResponse { ResponseCode = 2, Message = "Product No More Exists" };
-                }
+                return new AddToBasketResponse { ResponseCode = 2, Message = "Product No More Exists" };
 
                 if (!appUser.BasketItems.Any(bi => bi.ProductID == product.Id))
                 {
@@ -89,11 +86,7 @@ namespace E_commerce.Persistence.Repositories.BasketRepos
             {
                 AppUser? appUser = await GetUser();
                 if (appUser == null)
-                {
-                    return new RemoveSingleBasketItemResponse { ResponseCode = 404, 
-                                                                Message = "User Not Found"
-                                                              };
-                }
+                return new RemoveSingleBasketItemResponse { ResponseCode = 404, Message = "User Not Found" };
 
                 BasketItem basketItem = appUser.BasketItems.FirstOrDefault(b => b.Id == basketItemId);
                 if (basketItem != null)
@@ -125,13 +118,8 @@ namespace E_commerce.Persistence.Repositories.BasketRepos
                 AppUser? appUser = await GetUser();
 
                 if (appUser == null)
-                {
-                    return new RemoveAllBasketitemsResponse
-                    {
-                        ResponseCode = 404,
-                        Message = "User Not Found"
-                    };
-                }
+                return new RemoveAllBasketitemsResponse { ResponseCode = 404, Message = "User Not Found" };
+                
                 appUser.BasketItems.Clear();
                 await _context.SaveChangesAsync();
                 return new RemoveAllBasketitemsResponse { ResponseCode = 1, Message = "All Baskets Removed" };
@@ -152,22 +140,17 @@ namespace E_commerce.Persistence.Repositories.BasketRepos
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
                 AppUser? appUser = await GetUser();
+
                 if (appUser == null)
-                {
-                    return new ChangeBasketItemQuantityResponse
-                    {
-                        ResponseCode = 404,
-                        Message = "User Not Found"
-                    };
-                }
+                return new ChangeBasketItemQuantityResponse { ResponseCode = 404, Message = "User Not Found" };
 
                 BasketItem basketItem = appUser.BasketItems.FirstOrDefault(bi => bi.Id == basketItemId);
                 BasketItemMapper mapper = new BasketItemMapper();
                 if (basketItem == null)
-                {
-                    return new ChangeBasketItemQuantityResponse { ResponseCode = 2, Message = "Basket Item Could Not Found", BasketItems = appUser.BasketItems.Select(b => mapper.MapToDto(b)) };
+                return new ChangeBasketItemQuantityResponse { ResponseCode = 2,
+                                                              Message = "Basket Item Could Not Found", 
+                                                              BasketItems = appUser.BasketItems.Select(b => mapper.MapToDto(b)) };
 
-                }
                 Product product = await _context.Products.FirstOrDefaultAsync(p => p.Id == basketItem.ProductID);
                 ChangeBasketItemQuantityResponse response = new ChangeBasketItemQuantityResponse();
 
@@ -199,7 +182,6 @@ namespace E_commerce.Persistence.Repositories.BasketRepos
                 await _context.SaveChangesAsync();
                 stopwatch.Stop();
                 TimeSpan elapsed = stopwatch.Elapsed;
-                Console.WriteLine(elapsed.TotalSeconds);
                 return response;
             }
             catch(Exception ex)
@@ -214,21 +196,18 @@ namespace E_commerce.Persistence.Repositories.BasketRepos
             try
             {
                 AppUser? appUser = await GetUser();
+
                 if (appUser == null)
-                {
-                    return new ChangeBasketItemQuantityResponse
-                    {
-                        ResponseCode = 404,
-                        Message = "User Not Found"
-                    };
-                }
+                return new ChangeBasketItemQuantityResponse { ResponseCode = 404, Message = "User Not Found" };
 
                 BasketItem basketItem = appUser.BasketItems.FirstOrDefault(bi => bi.Id == basketItemId);
                 BasketItemMapper mapper = new BasketItemMapper();
+
                 if (basketItem == null)
-                {
-                    return new ChangeBasketItemQuantityResponse { ResponseCode = 2, Message = "Basket Item Could Not Found", BasketItems = appUser.BasketItems.Select(b => mapper.MapToDto(b)) };
-                }
+                return new ChangeBasketItemQuantityResponse { ResponseCode = 2,
+                                                              Message = "Basket Item Could Not Found", 
+                                                              BasketItems = appUser.BasketItems.Select(b => mapper.MapToDto(b)) };
+                
                 Product product = await _context.Products.FirstOrDefaultAsync(p => p.Id == basketItem.ProductID);
                 ChangeBasketItemQuantityResponse response = new ChangeBasketItemQuantityResponse();
 
