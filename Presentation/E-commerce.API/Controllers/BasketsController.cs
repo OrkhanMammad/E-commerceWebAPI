@@ -11,7 +11,8 @@ namespace E_commerce.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Admin")]
+    [Authorize(AuthenticationSchemes = "Admin", Roles = "ADMİN, USER")]
+    //[Authorize(Roles = "USER")]
     public class BasketsController : ControllerBase
     {
         readonly IBasketWriteRepository _basketWriteRepository;

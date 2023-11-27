@@ -28,9 +28,8 @@ namespace E_commerce.Persistence.Repositories.ProductRepos
             {
                 IQueryable<Product> DBproducts = _context.Products.Where(p => p.IsDeleted == false).AsQueryable().AsNoTracking();
                 if (DBproducts.Any(p => p.Name.ToUpper() == productAddVM.Name.ToUpper()))
-                {
                     return new ProductAddResponse { ResponseCode = 2, Message = "This Product Already Exists" };
-                }
+
                 DateTime dateTime = DateTime.Now;
                 Product newProduct = new Product
                 {

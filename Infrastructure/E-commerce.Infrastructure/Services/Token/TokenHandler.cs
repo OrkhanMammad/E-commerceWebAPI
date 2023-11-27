@@ -22,8 +22,9 @@ namespace E_commerce.Infrastructure.Services.Token
             _configuration = configuration;
         }
 
-        public TokenDTO CreateAccessToken(AppUser appUser)
+        public TokenDTO CreateAccessToken(AppUser appUser, string userRole)
         {
+            
             TokenDTO token = new();
             SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(_configuration["Token:SecurityKey"]));
 
@@ -37,7 +38,7 @@ namespace E_commerce.Infrastructure.Services.Token
                 expires: token.Expiration,
                 notBefore: DateTime.UtcNow,
                 signingCredentials: signingCredentials,
-                claims: new List<Claim> { new(ClaimTypes.Name, appUser.UserName)}
+                claims: new List<Claim> { new(ClaimTypes.Name, appUser.UserName), new(ClaimTypes.Role, userRole)}
                 );
 
             JwtSecurityTokenHandler tokenHandler = new();

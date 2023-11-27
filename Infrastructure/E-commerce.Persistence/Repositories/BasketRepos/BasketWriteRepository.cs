@@ -27,15 +27,21 @@ namespace E_commerce.Persistence.Repositories.BasketRepos
             _context = context;
         }
 
+        async Task<AppUser> GetUser()
+        {
+            var userName = _contextAccessor?.HttpContext?.User?.Identity?.Name;
+            AppUser? appUser = await _context.Users.Include(u => u.BasketItems).FirstOrDefaultAsync(u => u.UserName == userName);
+            return appUser;
+        }
+
         public async Task<AddToBasketResponse> AddToBasket(int productId)
         {
             try
             {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
-                var userName = _contextAccessor?.HttpContext?.User?.Identity?.Name;
-                AppUser? appUser = await _context.Users.Include(u => u.BasketItems).FirstOrDefaultAsync(u => u.UserName == userName);
                 
+                AppUser? appUser = await GetUser();
                 
                 if (appUser == null)
                 {
@@ -81,8 +87,7 @@ namespace E_commerce.Persistence.Repositories.BasketRepos
         {
             try
             {
-                var userName = _contextAccessor?.HttpContext?.User.Identity.Name;
-                AppUser appUser = await _context.Users.Include(u => u.BasketItems).FirstOrDefaultAsync(u => u.UserName == userName);
+                AppUser? appUser = await GetUser();
                 if (appUser == null)
                 {
                     return new RemoveSingleBasketItemResponse { ResponseCode = 404, 
@@ -117,8 +122,8 @@ namespace E_commerce.Persistence.Repositories.BasketRepos
         {
             try
             {
-                var userName = _contextAccessor?.HttpContext?.User.Identity.Name;
-                AppUser appUser = await _context.Users.Include(u => u.BasketItems).FirstOrDefaultAsync(u => u.UserName == userName);
+                AppUser? appUser = await GetUser();
+
                 if (appUser == null)
                 {
                     return new RemoveAllBasketitemsResponse
@@ -146,8 +151,7 @@ namespace E_commerce.Persistence.Repositories.BasketRepos
             {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
-                var userName = _contextAccessor?.HttpContext?.User.Identity.Name;
-                AppUser appUser = await _context.Users.Include(u => u.BasketItems).FirstOrDefaultAsync(u => u.UserName == userName);
+                AppUser? appUser = await GetUser();
                 if (appUser == null)
                 {
                     return new ChangeBasketItemQuantityResponse
@@ -208,9 +212,8 @@ namespace E_commerce.Persistence.Repositories.BasketRepos
         public async Task<ChangeBasketItemQuantityResponse> DecreaseBasketItemQuantityAsync(int basketItemId)
         {
             try
-            {               
-                var userName = _contextAccessor?.HttpContext?.User.Identity.Name;
-                AppUser appUser = await _context.Users.Include(u => u.BasketItems).FirstOrDefaultAsync(u => u.UserName == userName);
+            {
+                AppUser? appUser = await GetUser();
                 if (appUser == null)
                 {
                     return new ChangeBasketItemQuantityResponse
@@ -225,7 +228,6 @@ namespace E_commerce.Persistence.Repositories.BasketRepos
                 if (basketItem == null)
                 {
                     return new ChangeBasketItemQuantityResponse { ResponseCode = 2, Message = "Basket Item Could Not Found", BasketItems = appUser.BasketItems.Select(b => mapper.MapToDto(b)) };
-
                 }
                 Product product = await _context.Products.FirstOrDefaultAsync(p => p.Id == basketItem.ProductID);
                 ChangeBasketItemQuantityResponse response = new ChangeBasketItemQuantityResponse();

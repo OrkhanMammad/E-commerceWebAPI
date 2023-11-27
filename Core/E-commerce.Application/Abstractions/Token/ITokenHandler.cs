@@ -10,7 +10,7 @@ namespace E_commerce.Application.Abstractions.Token
 {
     public interface ITokenHandler
     {
-        TokenDTO CreateAccessToken(AppUser appUser);
+        TokenDTO CreateAccessToken(AppUser appUser, string userRole);
         string CreateRefreshToken();
 
     }

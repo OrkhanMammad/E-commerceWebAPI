@@ -40,6 +40,7 @@ namespace E_commerce.Persistence.Repositories.AccountRepos
                 {
                     return new AppUserLoginResponse { ResponseCode = 2, Message = "Username or Password is not correct" };
                 }
+                
                 if (appUser.LockoutEnd != null)
                 {
                     return new AppUserLoginResponse { ResponseCode = 2, Message = "This Account Has Been Locked" };
@@ -49,7 +50,8 @@ namespace E_commerce.Persistence.Repositories.AccountRepos
                 {
                     return new AppUserLoginResponse { ResponseCode = 2, Message = "Username or Password is not correct" };
                 }
-                TokenDTO token = _tokenHandler.CreateAccessToken(appUser);
+                var roles = await _userManager.GetRolesAsync(appUser);
+                TokenDTO token = _tokenHandler.CreateAccessToken(appUser,roles.FirstOrDefault());
 
                 return new AppUserLoginResponse { ResponseCode = 1, Message = "Logged In Successfully", Token = token };
             }

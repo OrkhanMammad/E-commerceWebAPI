@@ -18,5 +18,6 @@ namespace E_commerce.Domain.Entities
         public double TotalAmount { get; set; }
         public List<OrderItem> OrderItems { get; set; }
         public string Status { get; set; }
+        public DateTime CreatedDate { get; set;}
     }
 }
